@@ -1,3 +1,7 @@
-draft.py
-expenses.json
+__pycache__/
+*.pyc
+
 tasks.json
+expenses.json
+
+draft.py

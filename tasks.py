@@ -15,7 +15,6 @@ def load_tasks():
 
 
 tasks = load_tasks()
-print(f"loaded {len(tasks)} tasks")
 
 commands = ("add", "show", "done", "delete", "exit", "help")
 
@@ -99,33 +98,37 @@ def delete_task():
     print("task deleted")
 
 
-print('type "help" to show commands')
+def main_tasks():
+    print(f"loaded {len(tasks)} tasks\n")
 
-while True:
-    command = input("\ncommand: ")
+    print('type "help" to show commands')
 
-    if not command:
-        print("input is empty")
-        continue
+    while True:
+        command = input("\ncommand: ")
 
-    elif command == "help":
-        print("allowed commands:", ", ".join(commands))
+        if not command:
+            print("input is empty")
+            continue
 
-    elif command not in commands:
-        print("invalid command:", command)
-        print("available:", ", ".join(commands))
+        elif command == "help":
+            print("allowed commands:", ", ".join(commands))
 
-    if command == "exit":
-        break
+        elif command not in commands:
+            print("invalid command:", command)
+            print("available:", ", ".join(commands))
 
-    elif command == "add":
-        add_task()
+        if command == "exit":
+            print()
+            break
 
-    elif command == "show":
-        show_tasks()
+        elif command == "add":
+            add_task()
 
-    elif command == "done":
-        done_task()
+        elif command == "show":
+            show_tasks()
 
-    elif command == "delete":
-        delete_task()
+        elif command == "done":
+            done_task()
+
+        elif command == "delete":
+            delete_task()

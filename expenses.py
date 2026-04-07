@@ -15,7 +15,6 @@ def load_expenses():
 
 
 expenses = load_expenses()
-print(f"loaded {len(expenses)} expenses\n")
 
 commands = ("add", "show", "total", "by_category", "delete", "exit", "help")
 
@@ -60,6 +59,9 @@ def add_expense():
 
         try:
             amount = int(amount_str)
+            if amount <= 0:
+                print("amount must be greater than 0")
+                continue
             break
         except ValueError:
             print("only integers allowed")
@@ -136,34 +138,38 @@ def delete_expense():
     print("expense deleted")
 
 
-print('type "help" to show commands')
+def main_expenses():
+    print(f"loaded {len(expenses)} expenses\n")
 
-while True:
-    command = input("\ncommand: ")
-    if not command:
-        print("input is empty")
+    print('type "help" to show commands')
 
-    elif command == "help":
-        print("allowed commands:", ", ".join(commands))
+    while True:
+        command = input("\ncommand: ")
+        if not command:
+            print("input is empty")
 
-    elif command not in commands:
-        print("invalid command:", command)
-        print("available:", ", ".join(commands))
+        elif command == "help":
+            print("allowed commands:", ", ".join(commands))
 
-    elif command == "exit":
-        break
+        elif command not in commands:
+            print("invalid command:", command)
+            print("available:", ", ".join(commands))
 
-    elif command == "add":
-        add_expense()
+        elif command == "exit":
+            print()
+            break
 
-    elif command == "show":
-        show_expenses()
+        elif command == "add":
+            add_expense()
 
-    elif command == "total":
-        total_expenses()
+        elif command == "show":
+            show_expenses()
 
-    elif command == "by_category":
-        by_category()
+        elif command == "total":
+            total_expenses()
 
-    elif command == "delete":
-        delete_expense()
+        elif command == "by_category":
+            by_category()
+
+        elif command == "delete":
+            delete_expense()
