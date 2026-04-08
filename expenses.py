@@ -139,14 +139,16 @@ def delete_expense():
 
 
 def main_expenses():
-    print(f"loaded {len(expenses)} expenses\n")
-
+    print(f"loaded {len(expenses)} expenses")
+    print()
     print('type "help" to show commands')
 
     while True:
-        command = input("\ncommand: ")
+        command = input("\ncommand: ").lower()
+
         if not command:
             print("input is empty")
+            continue
 
         elif command == "help":
             print("allowed commands:", ", ".join(commands))
@@ -173,3 +175,7 @@ def main_expenses():
 
         elif command == "delete":
             delete_expense()
+
+
+if __name__ == "__main__":
+    main_expenses()

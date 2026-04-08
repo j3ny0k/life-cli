@@ -99,12 +99,12 @@ def delete_task():
 
 
 def main_tasks():
-    print(f"loaded {len(tasks)} tasks\n")
-
+    print(f"loaded {len(tasks)} tasks")
+    print()
     print('type "help" to show commands')
 
     while True:
-        command = input("\ncommand: ")
+        command = input("\ncommand: ").lower()
 
         if not command:
             print("input is empty")
@@ -132,3 +132,7 @@ def main_tasks():
 
         elif command == "delete":
             delete_task()
+
+
+if __name__ == "__main__":
+    main_tasks()
