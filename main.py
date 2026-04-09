@@ -1,15 +1,13 @@
 import tasks
 import expenses
+from utils import input_non_empty
 
 while True:
-    mode = input("mode (tasks / expenses / exit): ").lower()
+    mode = input_non_empty(
+        "mode (tasks / expenses / exit): ", newline_after_error=True
+    ).lower()
 
-    if not mode:
-        print("input is empty")
-        print()
-        continue
-
-    elif mode == "tasks":
+    if mode == "tasks":
         print()
         tasks.main_tasks()
 

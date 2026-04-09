@@ -1,4 +1,5 @@
 import json
+from utils import input_non_empty
 
 
 def save_tasks(tasks):
@@ -22,10 +23,7 @@ commands = ("add", "show", "done", "delete", "exit", "help")
 def input_num():
     while True:
         try:
-            num_str = input("\ntask num: ")
-            if not num_str:
-                print("input is empty")
-                continue
+            num_str = input_non_empty("\ntask num: ")
             num = int(num_str)
         except ValueError:
             print("only integers allowed")
@@ -43,15 +41,9 @@ def input_num():
 
 
 def add_task():
-    while True:
-        title = input("\ntask: ")
-        if not title:
-            print("input is empty")
-            continue
-        break
+    title = input_non_empty("\ntask: ")
 
     tasks.append({"title": title, "done": False})
-
     save_tasks(tasks)
 
 
@@ -61,11 +53,13 @@ def show_tasks():
         return
 
     num = 1
+
     for task in tasks:
         if task["done"]:
             done = "[x]"
         else:
             done = "[ ]"
+
         print(f"{num}. {done} {task['title']}")
         num += 1
 
@@ -104,13 +98,9 @@ def main_tasks():
     print('type "help" to show commands')
 
     while True:
-        command = input("\ncommand: ").lower()
+        command = input_non_empty("\ncommand: ").lower()
 
-        if not command:
-            print("input is empty")
-            continue
-
-        elif command == "help":
+        if command == "help":
             print("allowed commands:", ", ".join(commands))
 
         elif command not in commands:

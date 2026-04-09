@@ -1,4 +1,5 @@
 import json
+from utils import input_non_empty
 
 
 def save_expenses(expenses):
@@ -22,10 +23,7 @@ commands = ("add", "show", "total", "by_category", "delete", "exit", "help")
 def input_num():
     while True:
         try:
-            num_str = input("\nexpense num: ")
-            if not num_str:
-                print("input is empty")
-                continue
+            num_str = input_non_empty("\nexpense num: ")
             num = int(num_str)
         except ValueError:
             print("only integers allowed")
@@ -43,20 +41,10 @@ def input_num():
 
 
 def add_expense():
-    while True:
-        name = input("\nname: ")
-        if not name:
-            print("empty input")
-            continue
-        break
+    name = input_non_empty("\nname: ")
 
     while True:
-        amount_str = input("\namount: ")
-
-        if not amount_str:
-            print("input is empty")
-            continue
-
+        amount_str = input_non_empty("\namount: ")
         try:
             amount = int(amount_str)
             if amount <= 0:
@@ -66,15 +54,9 @@ def add_expense():
         except ValueError:
             print("only integers allowed")
 
-    while True:
-        category = input("\ncategory: ")
-        if not category:
-            print("input is empty")
-            continue
-        break
+    category = input_non_empty("\ncategory: ")
 
     expenses.append({"name": name, "amount": amount, "category": category})
-
     save_expenses(expenses)
 
 
@@ -104,12 +86,7 @@ def total_expenses():
 
 
 def by_category():
-    while True:
-        category_name = input("\nby_category: ")
-        if not category_name:
-            print("input is empty")
-            continue
-        break
+    category_name = input_non_empty("\nby_category: ")
 
     total = 0
     found = False
@@ -144,13 +121,9 @@ def main_expenses():
     print('type "help" to show commands')
 
     while True:
-        command = input("\ncommand: ").lower()
+        command = input_non_empty("\ncommand: ").lower()
 
-        if not command:
-            print("input is empty")
-            continue
-
-        elif command == "help":
+        if command == "help":
             print("allowed commands:", ", ".join(commands))
 
         elif command not in commands:
