@@ -1,6 +1,6 @@
 def input_non_empty(prompt, newline_after_error=False):
     while True:
-        value = input(prompt)
+        value = input(prompt).strip()
         if value:
             return value
         print("input is empty")
