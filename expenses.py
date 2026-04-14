@@ -1,5 +1,6 @@
 import json
 from utils import input_non_empty
+from utils import input_num
 
 
 def save_expenses(expenses):
@@ -18,26 +19,6 @@ def load_expenses():
 expenses = load_expenses()
 
 commands = ("add", "show", "total", "by_category", "delete", "exit", "help")
-
-
-def input_num():
-    while True:
-        try:
-            num_str = input_non_empty("\nexpense num: ")
-            num = int(num_str)
-        except ValueError:
-            print("only integers allowed")
-            continue
-
-        if not expenses:
-            print("no expenses")
-            return
-
-        if num < 1 or num > len(expenses):
-            print("invalid expense number")
-            continue
-
-        return num
 
 
 def add_expense():
@@ -103,7 +84,7 @@ def by_category():
 
 
 def delete_expense():
-    num = input_num()
+    num = input_num(expenses, "expense")
 
     if num is None:
         return
