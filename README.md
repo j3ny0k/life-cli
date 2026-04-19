@@ -1,33 +1,39 @@
 # Life CLI
 
-Simple CLI app that combines task management and expense tracking.
+CLI-приложение для управления задачами и расходами.
+
+Проект построен как multi-file структура с разделением логики на модули.
 
 ---
 
-## Features
+## Возможности
 
-### Tasks
+### Tasks (задачи)
 
-- add task
-- show tasks
-- mark task as done / undone
-- delete task
-- input validation
-
-### Expenses
-
-- add expense (name, amount, category)
-- show all expenses
-- total expenses
-- total by category
-- delete expense
-- input validation (including amount > 0)
+- add — добавить задачу
+- show — показать все задачи
+- find — поиск:
+  - `done` → выполненные
+  - `notdone` → невыполненные
+  - текст → поиск по названию
+- done — переключить статус (done / not done)
+- edit — изменить текст задачи
+- delete — удалить задачу
 
 ---
 
-## Usage
+### Expenses (расходы)
 
-Run the program:
+- add — добавить расход (name, amount, category)
+- show — показать все расходы
+- total — общая сумма
+- by_category — сумма по категории
+- edit — изменить расход
+- delete — удалить расход
+
+---
+
+## Запуск
 
 ```bash
 python main.py
@@ -35,21 +41,19 @@ python main.py
 
 ---
 
-## Modes
+## Режимы
 
-When you start the program, choose a mode:
+При запуске:
 
-```text
+```
 mode (tasks / expenses / exit):
 ```
 
 ---
 
-## Tasks mode
+## Пример работы (Tasks)
 
-Example:
-
-```text
+```
 mode: tasks
 
 command: add
@@ -62,20 +66,24 @@ command: done
 task num: 1
 task marked as done
 
+command: find
+find: done
+1. [x] buy bread
+
+command: edit
+task num: 1
+new task: buy milk
+
 command: delete
 task num: 1
 task deleted
-
-command: exit
 ```
 
 ---
 
-## Expenses mode
+## Пример работы (Expenses)
 
-Example:
-
-```text
+```
 mode: expenses
 
 command: add
@@ -93,28 +101,52 @@ command: by_category
 by_category: food
 food: 12
 
+command: edit
+expense num: 1
+name: milk
+amount: 15
+category: food
+
 command: delete
 expense num: 1
 expense deleted
-
-command: exit
 ```
 
 ---
 
-## Data storage
+## Хранение данных
 
-- tasks are stored in `tasks.json`
-- expenses are stored in `expenses.json`
-- data is saved automatically
-- data persists after restart
+- `tasks.json` — задачи
+- `expenses.json` — расходы
+- данные сохраняются автоматически
+- сохраняются между запусками
 
 ---
 
-## Notes
+## Обработка ошибок
 
-- empty input is handled
-- invalid numbers are handled
-- invalid commands are handled
-- amount must be greater than 0
-- JSON files are local (not pushed to GitHub)
+- пустой ввод → обрабатывается
+- неверные числа → обрабатываются
+- неверные команды → показывается список доступных
+- выбор по номеру проверяется
+
+---
+
+## Структура проекта
+
+- `main.py` — управление режимами
+- `tasks.py` — логика задач (CRUD + find + edit)
+- `expenses.py` — логика расходов
+- `utils.py` — ввод и валидация
+
+---
+
+## Цель проекта
+
+Практика backend-базы:
+
+- работа со списками и словарями
+- фильтрация данных (find)
+- работа с JSON
+- разделение кода на модули
+- базовая архитектура CLI-приложения

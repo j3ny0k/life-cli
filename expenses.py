@@ -18,7 +18,30 @@ def load_expenses():
 
 expenses = load_expenses()
 
-commands = ("add", "show", "total", "by_category", "delete", "exit", "help")
+commands = ("add", "show", "total", "by_category", "delete", "edit", "exit", "help")
+
+
+def calc_category_total(expenses, category_name):
+    total = 0
+    found = False
+
+    for expense in expenses:
+        if expense["category"] == category_name:
+            total += expense["amount"]
+            found = True
+
+    return total, found
+
+
+def calc_total(expenses):
+    total = 0
+    for expense in expenses:
+        total += expense["amount"]
+    return total
+
+
+def print_expense(num, expense):
+    print(f"{num}. {expense['name']} – {expense['amount']} – {expense['category']}")
 
 
 def add_expense():
@@ -46,36 +69,18 @@ def show_expenses():
         print("no expenses")
         return
 
-    num = 1
-
-    for expense in expenses:
-        name = expense["name"]
-        amount = expense["amount"]
-        category = expense["category"]
-
-        print(f"{num}. {name} – {amount} – {category}")
-        num += 1
+    for num, expense in enumerate(expenses, 1):
+        print_expense(num, expense)
 
 
 def total_expenses():
-    total = 0
-
-    for expense in expenses:
-        total += expense["amount"]
-
-    print(f"total: {total}")
+    print(f"total: {calc_total(expenses)}")
 
 
 def by_category():
     category_name = input_non_empty("\nby_category: ")
 
-    total = 0
-    found = False
-
-    for expense in expenses:
-        if expense["category"] == category_name:
-            total += expense["amount"]
-            found = True
+    total, found = calc_category_total(expenses, category_name)
 
     if not found:
         print("category not found")
@@ -90,10 +95,48 @@ def delete_expense():
         return
 
     del expenses[num - 1]
-
     save_expenses(expenses)
 
     print("expense deleted")
+
+
+def edit_expense():
+    if not expenses:
+        print("no expenses")
+        return
+
+    num = input_num(expenses, "expense")
+
+    if num is None:
+        return
+
+    expense = expenses[num - 1]
+    print_expense(num, expense)
+
+    name = input("\nname: ").strip()
+    if not name:
+        name = expense["name"]
+    expense["name"] = name
+
+    while True:
+        amount_str = input_non_empty("\namount: ")
+        try:
+            amount = int(amount_str)
+            if amount <= 0:
+                print("amount must be greater than 0")
+                continue
+            expense["amount"] = amount
+            break
+        except ValueError:
+            print("only integers allowed")
+
+    category = input("\ncategory: ").strip()
+    if not category:
+        category = expense["category"]
+    expense["category"] = category
+
+    print("expense updated")
+    save_expenses(expenses)
 
 
 def main_expenses():
@@ -129,6 +172,9 @@ def main_expenses():
 
         elif command == "delete":
             delete_expense()
+
+        elif command == "edit":
+            edit_expense()
 
 
 if __name__ == "__main__":

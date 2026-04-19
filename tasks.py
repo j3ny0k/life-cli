@@ -18,7 +18,7 @@ def load_tasks():
 
 tasks = load_tasks()
 
-commands = ("add", "show", "find", "done", "delete", "exit", "help")
+commands = ("add", "show", "find", "done", "delete", "edit", "exit", "help")
 
 
 def print_task(num, task):
@@ -43,6 +43,10 @@ def show_tasks():
 
 
 def find_task():
+    if not tasks:
+        print("no tasks")
+        return
+
     find = input_non_empty("\nfind: ").lower()
     found = False
 
@@ -93,6 +97,25 @@ def delete_task():
     print("task deleted")
 
 
+def edit_task():
+    if not tasks:
+        print("no tasks")
+        return
+
+    num = input_num(tasks, "task")
+
+    if num is None:
+        return
+
+    print_task(num, tasks[num - 1])
+
+    new_task = input_non_empty("\nnew task: ")
+    tasks[num - 1]["title"] = new_task
+
+    print("task updated")
+    save_tasks(tasks)
+
+
 def main_tasks():
     print(f"loaded {len(tasks)} tasks")
     print()
@@ -126,6 +149,9 @@ def main_tasks():
 
         elif command == "delete":
             delete_task()
+
+        elif command == "edit":
+            edit_task()
 
 
 if __name__ == "__main__":

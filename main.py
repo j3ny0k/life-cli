@@ -2,22 +2,28 @@ import tasks
 import expenses
 from utils import input_non_empty
 
-while True:
-    mode = input_non_empty(
-        "mode (tasks / expenses / exit): ", newline_after_error=True
-    ).lower()
 
-    if mode == "tasks":
-        print()
-        tasks.main_tasks()
+def main():
+    while True:
+        mode = input_non_empty(
+            "mode (tasks / expenses / exit): ", newline_after_error=True
+        ).lower()
 
-    elif mode == "expenses":
-        print()
-        expenses.main_expenses()
+        if mode == "tasks":
+            print()
+            tasks.main_tasks()
 
-    elif mode == "exit":
-        break
+        elif mode == "expenses":
+            print()
+            expenses.main_expenses()
 
-    else:
-        print("invalid mode")
-        print()
+        elif mode == "exit":
+            break
+
+        else:
+            print("invalid mode")
+            print()
+
+
+if __name__ == "__main__":
+    main()
