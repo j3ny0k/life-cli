@@ -18,7 +18,7 @@ def load_tasks():
 
 tasks = load_tasks()
 
-commands = ("add", "show", "find", "done", "delete", "edit", "exit", "help")
+commands = ("add", "show", "find", "done", "delete", "edit", "help", "exit")
 
 
 def print_task(num, task):
@@ -70,6 +70,10 @@ def find_task():
 
 
 def done_task():
+    if not tasks:
+        print("no tasks")
+        return
+
     num = input_num(tasks, "task")
 
     if num is None:
@@ -82,19 +86,6 @@ def done_task():
         print("task marked as done")
     else:
         print("task marked as not done")
-
-
-def delete_task():
-    num = input_num(tasks, "task")
-
-    if num is None:
-        return
-
-    del tasks[num - 1]
-
-    save_tasks(tasks)
-
-    print("task deleted")
 
 
 def edit_task():
@@ -110,30 +101,42 @@ def edit_task():
     print_task(num, tasks[num - 1])
 
     new_task = input_non_empty("\nnew task: ")
+
     tasks[num - 1]["title"] = new_task
 
     print("task updated")
+
     save_tasks(tasks)
+
+
+def delete_task():
+    if not tasks:
+        print("no tasks")
+        return
+
+    num = input_num(tasks, "task")
+
+    if num is None:
+        return
+
+    del tasks[num - 1]
+
+    save_tasks(tasks)
+
+    print("task deleted")
 
 
 def main_tasks():
     print(f"loaded {len(tasks)} tasks")
     print()
-    print('type "help" to show commands')
+    print("type help to show commands")
 
     while True:
         command = input_non_empty("\ncommand: ").lower()
 
-        if command == "help":
-            print("allowed commands:", ", ".join(commands))
-
-        elif command not in commands:
+        if command not in commands:
             print("invalid command:", command)
             print("available:", ", ".join(commands))
-
-        if command == "exit":
-            print()
-            break
 
         elif command == "add":
             add_task()
@@ -147,11 +150,17 @@ def main_tasks():
         elif command == "done":
             done_task()
 
+        elif command == "edit":
+            edit_task()
+
         elif command == "delete":
             delete_task()
 
-        elif command == "edit":
-            edit_task()
+        elif command == "help":
+            print("allowed commands:", ", ".join(commands))
+
+        elif command == "exit":
+            break
 
 
 if __name__ == "__main__":

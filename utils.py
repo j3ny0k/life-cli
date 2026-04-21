@@ -17,11 +17,11 @@ def input_num(items, item_name):
             print("only integers allowed")
             continue
 
-        if not items:
-            print(f"no {item_name}")
-            return
+        if num <= 0:
+            print("number must be greater than 0")
+            continue
 
-        if num < 1 or num > len(items):
+        elif num > len(items):
             print(f"invalid {item_name} number")
             continue
 

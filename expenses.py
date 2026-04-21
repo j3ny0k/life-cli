@@ -18,7 +18,17 @@ def load_expenses():
 
 expenses = load_expenses()
 
-commands = ("add", "show", "total", "by_category", "delete", "edit", "exit", "help")
+commands = (
+    "add",
+    "show",
+    "find",
+    "total",
+    "by_category",
+    "delete",
+    "edit",
+    "help",
+    "exit",
+)
 
 
 def calc_category_total(expenses, category_name):
@@ -73,11 +83,41 @@ def show_expenses():
         print_expense(num, expense)
 
 
+def find_expenses():
+    if not expenses:
+        print("no expenses")
+        return
+
+    find = input_non_empty("\nfind: ").lower()
+    found = False
+
+    try:
+        int_find = int(find)
+    except ValueError:
+        int_find = None
+
+    for num, expense in enumerate(expenses, 1):
+        if find in expense["name"].lower() or find in expense["category"].lower():
+            print_expense(num, expense)
+            found = True
+
+        elif int_find is not None and int_find == expense["amount"]:
+            print_expense(num, expense)
+            found = True
+
+    if not found:
+        print("not found")
+
+
 def total_expenses():
     print(f"total: {calc_total(expenses)}")
 
 
 def by_category():
+    if not expenses:
+        print("no expenses")
+        return
+
     category_name = input_non_empty("\nby_category: ")
 
     total, found = calc_category_total(expenses, category_name)
@@ -86,18 +126,6 @@ def by_category():
         print("category not found")
     else:
         print(f"{category_name}: {total}")
-
-
-def delete_expense():
-    num = input_num(expenses, "expense")
-
-    if num is None:
-        return
-
-    del expenses[num - 1]
-    save_expenses(expenses)
-
-    print("expense deleted")
 
 
 def edit_expense():
@@ -113,50 +141,78 @@ def edit_expense():
     expense = expenses[num - 1]
     print_expense(num, expense)
 
-    name = input("\nname: ").strip()
-    if not name:
-        name = expense["name"]
-    expense["name"] = name
+    updated = False
+
+    new_name = input("\nnew name: ").strip()
+
+    if new_name:
+        expense["name"] = new_name
+        updated = True
 
     while True:
-        amount_str = input_non_empty("\namount: ")
-        try:
-            amount = int(amount_str)
-            if amount <= 0:
-                print("amount must be greater than 0")
+        new_amount_str = input("\nnew amount: ").strip()
+
+        if new_amount_str:
+            try:
+                new_amount = int(new_amount_str)
+                if new_amount <= 0:
+                    print("amount must be greater than 0")
+                    continue
+            except ValueError:
+                print("only integers allowed")
                 continue
-            expense["amount"] = amount
+
+            expense["amount"] = new_amount
+            updated = True
             break
-        except ValueError:
-            print("only integers allowed")
 
-    category = input("\ncategory: ").strip()
-    if not category:
-        category = expense["category"]
-    expense["category"] = category
+        else:
+            break
 
-    print("expense updated")
+    new_category = input("\nnew category: ").strip()
+
+    if new_category:
+        expense["category"] = new_category
+        updated = True
+
+    if updated:
+        print()
+        print("expense updated")
+    else:
+        print()
+        print("expense not updated")
+
     save_expenses(expenses)
+
+
+def delete_expense():
+    if not expenses:
+        print("no expenses")
+        return
+
+    num = input_num(expenses, "expense")
+
+    if num is None:
+        return
+
+    del expenses[num - 1]
+
+    save_expenses(expenses)
+
+    print("expense deleted")
 
 
 def main_expenses():
     print(f"loaded {len(expenses)} expenses")
     print()
-    print('type "help" to show commands')
+    print("type help to show commands")
 
     while True:
         command = input_non_empty("\ncommand: ").lower()
 
-        if command == "help":
-            print("allowed commands:", ", ".join(commands))
-
-        elif command not in commands:
+        if command not in commands:
             print("invalid command:", command)
             print("available:", ", ".join(commands))
-
-        elif command == "exit":
-            print()
-            break
 
         elif command == "add":
             add_expense()
@@ -164,17 +220,26 @@ def main_expenses():
         elif command == "show":
             show_expenses()
 
+        elif command == "find":
+            find_expenses()
+
         elif command == "total":
             total_expenses()
 
         elif command == "by_category":
             by_category()
 
+        elif command == "edit":
+            edit_expense()
+
         elif command == "delete":
             delete_expense()
 
-        elif command == "edit":
-            edit_expense()
+        elif command == "help":
+            print("allowed commands:", ", ".join(commands))
+
+        elif command == "exit":
+            break
 
 
 if __name__ == "__main__":
